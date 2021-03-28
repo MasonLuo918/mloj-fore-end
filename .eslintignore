@@ -1,0 +1,6 @@
+/src/**/*.vue
+/src/**/*.js
+
+# Invalid
+/src/**/*.vue
+/src/**/*.js
