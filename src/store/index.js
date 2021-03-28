@@ -3,7 +3,8 @@ import {createStore} from 'vuex'
 export default createStore({
     state: {
         tagsList: [],
-        collapse: false
+        collapse: false,
+        user_token: ''
     },
     mutations: {
         delTagsItem(state, data) {
@@ -49,6 +50,9 @@ export default createStore({
         // 侧边栏折叠
         hadndleCollapse(state, data) {
             state.collapse = data;
+        },
+        save_user_token (state, token) {
+            state.user_token = token
         }
     },
     actions: {},

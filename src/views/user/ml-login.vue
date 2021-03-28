@@ -1,0 +1,141 @@
+<template>
+  <div class="login-wrap">
+    <div class="ms-login">
+      <div class="ms-title">用户登录</div>
+      <el-form :model="param" :rules="rules" ref="login" label-width="0px" class="ms-content">
+        <el-form-item prop="username">
+          <el-input v-model="param.username" placeholder="username">
+            <template #prepend>
+              <el-button icon="el-icon-user"></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <el-form-item prop="password">
+          <el-input
+              type="password"
+              placeholder="password"
+              v-model="param.password"
+              @keyup.enter="submitForm()"
+          >
+            <template #prepend>
+              <el-button icon="el-icon-lock"></el-button>
+            </template>
+          </el-input>
+        </el-form-item>
+        <div class="login-btn">
+          <el-button type="primary" @click="submitForm()">登录</el-button>
+        </div>
+
+        <div class="login-btn">
+          <el-button type="info" @click="$router.push('/user/register')">去注册</el-button>
+        </div>
+      </el-form>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data() {
+    return {
+      param: {
+        username: "",
+        password: ""
+      },
+      rules: {
+        username: [
+          {required: true, message: "请输入用户名", trigger: "blur"}
+        ],
+        password: [
+          {required: true, message: "请输入密码", trigger: "blur"}
+        ]
+      }
+    };
+  },
+  created() {
+    this.$store.commit("clearTags");
+  },
+  methods: {
+    async submitForm() {
+      const param = {
+        username: this.param.username,
+        password: this.param.password
+      }
+      const url = '/login'
+      await this.axios
+          .post(url, param)
+          .then((response) => {
+            const data = response.data.data
+            console.log(data)
+            this.$store.commit('save_user_token', data)
+            this.$notify.success({
+              message: '登录成功，等待跳转',
+              duration: 1000
+            })
+            // 进行跳转
+            setTimeout(() => {
+              this.$router.push({
+                path: '/user/dashboard',
+                query: {
+                  username: data.username
+                }
+              }, 1000)
+            })
+          })
+          .catch((error) => {
+            this.error = error.response.data.message
+          })
+    }
+  }
+};
+</script>
+
+<style scoped>
+.login-wrap {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-image: url(../../assets/img/login-bg.jpg);
+  background-size: 100%;
+}
+
+.ms-title {
+  width: 100%;
+  line-height: 50px;
+  text-align: center;
+  font-size: 20px;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.ms-login {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 350px;
+  margin: -190px 0 0 -175px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+}
+
+.ms-content {
+  padding: 30px 30px;
+}
+
+.login-btn {
+  text-align: center;
+}
+
+.login-btn button {
+  width: 100%;
+  height: 36px;
+  margin-bottom: 10px;
+}
+
+.login-tips {
+  font-size: 12px;
+  line-height: 30px;
+  color: #fff;
+}
+</style>

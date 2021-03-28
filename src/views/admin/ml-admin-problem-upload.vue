@@ -154,9 +154,9 @@
 </template>
 
 <script>
-import MlInput from './ml-input'
-import MlMarkdown from './ml-markdown'
-import MlAddableTextarea from './ml-addable-textarea'
+import MlInput from './ml-admin-input'
+import MlMarkdown from './ml-admin-markdown'
+import MlAddableTextarea from './ml-admin-addable-textarea'
 
 export default {
   name: 'ProblemUpload',
